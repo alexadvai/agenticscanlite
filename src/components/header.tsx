@@ -1,4 +1,4 @@
-import { ShieldCheck } from 'lucide-react';
+import { Palette, ShieldCheck } from 'lucide-react';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import {
@@ -8,8 +8,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent
 } from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from './ui/sidebar';
+import { ThemeSwitcher } from './theme-switcher';
 
 
 export function Header() {
@@ -47,6 +52,17 @@ export function Header() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                    <Palette className="mr-2 h-4 w-4" />
+                    <span>Change Theme</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                        <ThemeSwitcher />
+                    </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Log out</DropdownMenuItem>
           </DropdownMenuContent>
