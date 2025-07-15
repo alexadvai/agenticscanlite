@@ -9,17 +9,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { SidebarTrigger } from './ui/sidebar';
 
 
 export function Header() {
   return (
-    <header className="bg-card border-b sticky top-0 z-50">
+    <header className="bg-background/80 backdrop-blur-sm border-b sticky top-0 z-40">
       <div className="container mx-auto flex items-center justify-between gap-4 h-16">
-        <div className="flex items-center gap-3">
-          <ShieldCheck className="w-8 h-8 text-primary" />
-          <h1 className="text-xl sm:text-2xl font-headline font-bold text-foreground">
-            AgenticScanLite
-          </h1>
+        <div className="flex items-center gap-2">
+           <SidebarTrigger className="md:hidden" />
+           <div className="hidden md:flex items-center gap-3">
+             <ShieldCheck className="w-8 h-8 text-primary" />
+             <h1 className="text-xl sm:text-2xl font-headline font-bold text-foreground">
+                AgenticScanLite
+            </h1>
+           </div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
