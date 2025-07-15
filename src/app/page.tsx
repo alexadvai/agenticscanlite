@@ -28,7 +28,7 @@ export default function Home() {
         <SidebarContent>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton href="#dashboard" isActive={true} tooltip="Dashboard">
+              <SidebarMenuButton href="#dashboard" tooltip="Dashboard">
                 <LayoutDashboard />
                 Dashboard
               </SidebarMenuButton>
