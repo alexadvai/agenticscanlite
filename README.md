@@ -1,6 +1,6 @@
-# AdversAI Web Scanner
+# AgenticScanLite
 
-AdversAI Web Scanner is a modern, AI-powered web application security scanner built with Next.js, ShadCN UI, and Google's Gemini models via Genkit. It provides a comprehensive interface for security analysts to launch, monitor, and analyze web security scans. The key feature is an integrated AI assistant that helps explain complex vulnerabilities in plain language.
+AgenticScanLite is a modern, AI-powered web application security scanner built with Next.js, ShadCN UI, and Google's Gemini models via Genkit. It provides a comprehensive interface for security analysts to launch, monitor, and analyze web security scans. The key feature is an integrated AI assistant that helps explain complex vulnerabilities in plain language.
 
 ## ✨ Features
 

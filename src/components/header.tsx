@@ -18,7 +18,7 @@ export function Header() {
         <div className="flex items-center gap-3">
           <ShieldCheck className="w-8 h-8 text-primary" />
           <h1 className="text-xl sm:text-2xl font-headline font-bold text-foreground">
-            AdversAI Web Scanner
+            AgenticScanLite
           </h1>
         </div>
         <DropdownMenu>
@@ -35,7 +35,7 @@ export function Header() {
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">Analyst</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  analyst@adversai.com
+                  analyst@agenticscan.com
                 </p>
               </div>
             </DropdownMenuLabel>

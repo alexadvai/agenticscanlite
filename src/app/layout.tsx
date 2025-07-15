@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'AdversAI Web Scanner',
+  title: 'AgenticScanLite',
   description: 'A web application scanner built with Next.js and Firebase.',
 };
 
