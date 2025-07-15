@@ -25,8 +25,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState('default');
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('app-theme');
-    if (storedTheme && themes.some(t => t.name === storedTheme)) {
+    const storedTheme = localStorage.getItem('app-theme') || 'default';
+    if (themes.some(t => t.name === storedTheme)) {
       setThemeState(storedTheme);
       document.documentElement.setAttribute('data-theme', storedTheme);
     }
