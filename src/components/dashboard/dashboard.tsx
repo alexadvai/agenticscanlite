@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { mockScans } from "@/lib/mock-data";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { SeverityBadge } from "../scanner/severity-badge";
 import type { Vulnerability, WebAppScan } from "@/lib/types";
 import { ShieldCheck, Clock, CheckCircle, AlertTriangle, FileText } from "lucide-react";
@@ -22,6 +22,39 @@ const COLORS = {
     Informational: 'hsl(var(--muted-foreground))',
   };
   
+const RecentScanRow = ({ scan, onRowClick }: { scan: WebAppScan, onRowClick: (scan: WebAppScan) => void }) => {
+    const [formattedDate, setFormattedDate] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (scan.completedAt) {
+            setFormattedDate(format(new Date(scan.completedAt), "PPp"));
+        } else {
+            setFormattedDate('N/A');
+        }
+    }, [scan.completedAt]);
+
+    const highestSeverity = getHighestSeverity(scan.vulns);
+
+    return (
+        <TableRow onClick={() => onRowClick(scan)} className="cursor-pointer">
+            <TableCell className="font-medium">{scan.targetUrl}</TableCell>
+            <TableCell>{formattedDate || '...'}</TableCell>
+            <TableCell className="text-center font-mono">{scan.status === 'failed' ? 'N/A' : scan.score}</TableCell>
+            <TableCell>
+            {highestSeverity ? (
+                <SeverityBadge severity={highestSeverity} />
+            ) : (
+                scan.status !== 'failed' && <span className="text-muted-foreground">None</span>
+            )}
+            </TableCell>
+            <TableCell className="text-center">
+                <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100/10 text-green-500' : 'bg-red-100/10 text-red-500'}`}>
+                    {scan.status}
+                </span>
+            </TableCell>
+        </TableRow>
+    );
+};
 
 export default function Dashboard() {
     const [selectedScan, setSelectedScan] = useState<WebAppScan | null>(null);
@@ -166,28 +199,9 @@ export default function Dashboard() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {recentScans.map((scan) => {
-                            const highestSeverity = getHighestSeverity(scan.vulns);
-                            return (
-                                <TableRow key={scan.id} onClick={() => setSelectedScan(scan)} className="cursor-pointer">
-                                    <TableCell className="font-medium">{scan.targetUrl}</TableCell>
-                                    <TableCell>{scan.completedAt ? format(new Date(scan.completedAt), "PPp") : 'N/A'}</TableCell>
-                                    <TableCell className="text-center font-mono">{scan.status === 'failed' ? 'N/A' : scan.score}</TableCell>
-                                    <TableCell>
-                                    {highestSeverity ? (
-                                        <SeverityBadge severity={highestSeverity} />
-                                    ) : (
-                                        scan.status !== 'failed' && <span className="text-muted-foreground">None</span>
-                                    )}
-                                    </TableCell>
-                                    <TableCell className="text-center">
-                                        <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100/10 text-green-500' : 'bg-red-100/10 text-red-500'}`}>
-                                            {scan.status}
-                                        </span>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })}
+                        {recentScans.map((scan) => (
+                           <RecentScanRow key={scan.id} scan={scan} onRowClick={setSelectedScan} />
+                        ))}
                     </TableBody>
                  </Table>
             </CardContent>
