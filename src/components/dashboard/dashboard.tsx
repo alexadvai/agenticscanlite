@@ -16,9 +16,9 @@ import { getHighestSeverity } from "../scanner/scan-reports";
 
 const COLORS = {
     Critical: 'hsl(var(--destructive))',
-    High: 'hsl(24.6 95% 53.1%)',
+    High: 'hsl(var(--chart-4))',
     Medium: 'hsl(var(--chart-3))',
-    Low: 'hsl(var(--primary))',
+    Low: 'hsl(var(--chart-1))',
     Informational: 'hsl(var(--muted-foreground))',
   };
   
@@ -26,6 +26,7 @@ const RecentScanRow = ({ scan, onRowClick }: { scan: WebAppScan, onRowClick: (sc
     const [formattedDate, setFormattedDate] = useState<string | null>(null);
 
     useEffect(() => {
+        // This effect runs only on the client, after hydration
         if (scan.completedAt) {
             setFormattedDate(format(new Date(scan.completedAt), "PPp"));
         } else {
@@ -100,74 +101,72 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-1 space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Scans</CardTitle>
-                            <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{totalScans}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-                            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{completedScans}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Active/Queued</CardTitle>
-                            <Clock className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{runningScans}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Failed</CardTitle>
-                            <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{failedScans}</div>
-                        </CardContent>
-                    </Card>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-1">
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Vulnerability Severity</CardTitle>
-                        <CardDescription>Overall distribution.</CardDescription>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Total Scans</CardTitle>
+                        <ShieldCheck className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="pb-4">
-                        <ResponsiveContainer width="100%" height={150}>
-                        <PieChart>
-                            <Pie data={severityDistribution} labelLine={false} outerRadius={60} fill="#8884d8" dataKey="value">
-                            {severityDistribution.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
-                            ))}
-                            </Pie>
-                            <Tooltip 
-                                contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }}
-                                itemStyle={{ textTransform: 'capitalize' }}
-                            />
-                        </PieChart>
-                        </ResponsiveContainer>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{totalScans}</div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Completed</CardTitle>
+                        <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{completedScans}</div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Active/Queued</CardTitle>
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{runningScans}</div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                        <CardTitle className="text-sm font-medium">Failed</CardTitle>
+                        <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-2xl font-bold">{failedScans}</div>
                     </CardContent>
                 </Card>
             </div>
-            <Card className="lg:col-span-2">
+            <Card className="lg:col-span-1">
+                <CardHeader>
+                    <CardTitle>Vulnerability Severity</CardTitle>
+                    <CardDescription>Overall distribution.</CardDescription>
+                </CardHeader>
+                <CardContent className="pb-4">
+                    <ResponsiveContainer width="100%" height={240}>
+                    <PieChart>
+                        <Pie data={severityDistribution} labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value">
+                        {severityDistribution.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[entry.name as keyof typeof COLORS]} />
+                        ))}
+                        </Pie>
+                        <Tooltip 
+                            contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }}
+                            itemStyle={{ textTransform: 'capitalize' }}
+                        />
+                    </PieChart>
+                    </ResponsiveContainer>
+                </CardContent>
+            </Card>
+            <Card className="lg:col-span-1">
                 <CardHeader>
                     <CardTitle>Scans Over Time</CardTitle>
-                    <CardDescription>Number of completed scans per day.</CardDescription>
+                    <CardDescription>Completed scans per day.</CardDescription>
                 </CardHeader>
                 <CardContent className="pl-2 pr-6 pb-6">
-                    <ResponsiveContainer width="100%" height={380}>
+                    <ResponsiveContainer width="100%" height={240}>
                         <BarChart data={scansOverTime}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))"/>
                             <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
