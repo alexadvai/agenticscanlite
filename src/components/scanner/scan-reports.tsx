@@ -19,7 +19,7 @@ import { SeverityBadge } from "./severity-badge";
 
 type SortKey = "targetUrl" | "completedAt" | "score" | "severity";
 
-const getHighestSeverity = (vulns: Vulnerability[]): Vulnerability["severity"] | null => {
+export const getHighestSeverity = (vulns: Vulnerability[]): Vulnerability["severity"] | null => {
   if (vulns.length === 0) return null;
   const severityOrder: Vulnerability["severity"][] = ["Critical", "High", "Medium", "Low", "Informational"];
   let highest: Vulnerability["severity"] | null = null;
@@ -132,7 +132,7 @@ export default function ScanReports() {
                   )}
                 </TableCell>
                 <TableCell className="text-center">
-                    <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100/10 text-green-500' : 'bg-red-100/10 text-red-500'}`}>
                         {scan.status}
                     </span>
                 </TableCell>

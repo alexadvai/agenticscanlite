@@ -18,7 +18,7 @@ export default function ScanQueue() {
     const filteredScans = mockScans.filter(
       (scan) => scan.status === "queued" || scan.status === "running"
     );
-    setQueuedScans(filteredScans);
+    setQueuedScans(filteredScans.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
   }, []);
 
   const handleCancelScan = (scanId: string) => {
@@ -26,6 +26,7 @@ export default function ScanQueue() {
     toast({
       title: "Scan Canceled",
       description: `The scan (ID: ${scanId}) has been canceled.`,
+      variant: 'destructive',
     });
   };
 
