@@ -4,7 +4,6 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { mockScans } from "@/lib/mock-data";
 import { useMemo, useState, useEffect } from "react";
 import { SeverityBadge } from "../scanner/severity-badge";
 import type { Vulnerability, WebAppScan } from "@/lib/types";
@@ -12,6 +11,7 @@ import { ShieldCheck, Clock, CheckCircle, AlertTriangle, FileText } from "lucide
 import { format } from 'date-fns';
 import ReportDetailModal from "../scanner/report-detail-modal";
 import { getHighestSeverity } from "../scanner/scan-reports";
+import { useScans } from "@/context/scans-context";
 
 
 const COLORS = {
@@ -58,6 +58,7 @@ const RecentScanRow = ({ scan, onRowClick }: { scan: WebAppScan, onRowClick: (sc
 };
 
 export default function Dashboard() {
+    const { scans } = useScans();
     const [selectedScan, setSelectedScan] = useState<WebAppScan | null>(null);
 
     const {
@@ -70,10 +71,10 @@ export default function Dashboard() {
         recentScans,
     } = useMemo(() => {
         const counts: Record<Vulnerability["severity"], number> = { Critical: 0, High: 0, Medium: 0, Low: 0, Informational: 0 };
-        mockScans.forEach(scan => scan.vulns.forEach(vuln => counts[vuln.severity]++));
+        scans.forEach(scan => scan.vulns.forEach(vuln => counts[vuln.severity]++));
         
         const timeCounts: Record<string, number> = {};
-        mockScans.forEach(scan => {
+        scans.forEach(scan => {
             if (scan.completedAt) {
                 const date = new Date(scan.completedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                 if (!timeCounts[date]) timeCounts[date] = 0;
@@ -81,7 +82,7 @@ export default function Dashboard() {
             }
         });
         
-        const recent = mockScans
+        const recent = scans
             .filter(s => s.status === 'completed' || s.status === 'failed')
             .sort((a, b) => new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime())
             .slice(0, 5);
@@ -89,13 +90,13 @@ export default function Dashboard() {
         return {
             severityDistribution: Object.entries(counts).map(([name, value]) => ({ name, value })).filter(item => item.value > 0),
             scansOverTime: Object.entries(timeCounts).map(([name, Scans]) => ({ name, Scans })).reverse(),
-            totalScans: mockScans.length,
-            completedScans: mockScans.filter(s => s.status === 'completed').length,
-            runningScans: mockScans.filter(s => s.status === 'running' || s.status === 'queued').length,
-            failedScans: mockScans.filter(s => s.status === 'failed').length,
+            totalScans: scans.length,
+            completedScans: scans.filter(s => s.status === 'completed').length,
+            runningScans: scans.filter(s => s.status === 'running' || s.status === 'queued').length,
+            failedScans: scans.filter(s => s.status === 'failed').length,
             recentScans: recent,
         };
-    }, []);
+    }, [scans]);
 
 
   return (
@@ -144,8 +145,8 @@ export default function Dashboard() {
                     <CardTitle>Vulnerability Severity</CardTitle>
                     <CardDescription>Overall distribution.</CardDescription>
                 </CardHeader>
-                <CardContent className="pb-4">
-                    <ResponsiveContainer width="100%" height={240}>
+                <CardContent className="pb-4 h-[240px]">
+                    <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie data={severityDistribution} labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value">
                         {severityDistribution.map((entry, index) => (
@@ -165,8 +166,8 @@ export default function Dashboard() {
                     <CardTitle>Scans Over Time</CardTitle>
                     <CardDescription>Completed scans per day.</CardDescription>
                 </CardHeader>
-                <CardContent className="pl-2 pr-6 pb-6">
-                    <ResponsiveContainer width="100%" height={240}>
+                <CardContent className="pl-2 pr-6 pb-6 h-[240px]">
+                    <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={scansOverTime}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))"/>
                             <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />

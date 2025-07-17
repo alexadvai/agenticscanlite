@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { mockScans } from "@/lib/mock-data";
 import type { WebAppScan, Vulnerability } from "@/lib/types";
 import {
   Table,
@@ -16,6 +15,7 @@ import { ArrowUpDown } from "lucide-react";
 import { format } from "date-fns";
 import ReportDetailModal from "./report-detail-modal";
 import { SeverityBadge } from "./severity-badge";
+import { useScans } from "@/context/scans-context";
 
 type SortKey = "targetUrl" | "completedAt" | "score" | "severity";
 
@@ -36,10 +36,11 @@ export const getHighestSeverity = (vulns: Vulnerability[]): Vulnerability["sever
 }
 
 export default function ScanReports() {
+  const { scans } = useScans();
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: "asc" | "desc" } | null>({ key: 'completedAt', direction: 'desc' });
   const [selectedScan, setSelectedScan] = useState<WebAppScan | null>(null);
 
-  const completedScans = useMemo(() => mockScans.filter((scan) => scan.status === "completed" || scan.status === "failed"), []);
+  const completedScans = useMemo(() => scans.filter((scan) => scan.status === "completed" || scan.status === "failed"), [scans]);
 
   const sortedScans = useMemo(() => {
     let sortableItems = [...completedScans];
@@ -78,11 +79,6 @@ export default function ScanReports() {
     }
     setSortConfig({ key, direction });
   };
-
-  const getSortIndicator = (key: SortKey) => {
-    if (!sortConfig || sortConfig.key !== key) return null;
-    return sortConfig.direction === 'asc' ? '▲' : '▼';
-  }
 
   return (
     <div>

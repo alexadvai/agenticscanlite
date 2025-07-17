@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Rocket, Target, KeyRound, Text, Radio } from "lucide-react";
+import { Rocket, Target, KeyRound, Radio } from "lucide-react";
+import { useScans } from "@/context/scans-context";
 
 const formSchema = z.object({
   targetUrl: z.string().url({ message: "Please enter a valid URL." }),
@@ -53,6 +54,8 @@ const formSchema = z.object({
 
 export default function NewScanForm() {
   const { toast } = useToast();
+  const { addScan } = useScans();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,7 +72,20 @@ export default function NewScanForm() {
   const authMethod = form.watch("authMethod");
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    addScan({
+        id: `scan-${Math.random().toString(36).substring(2, 8)}`,
+        targetUrl: values.targetUrl,
+        scanMode: values.scanMode,
+        authMethod: values.authMethod || 'none',
+        status: "queued",
+        agentId: "agent-manual-01",
+        submittedBy: "user-1",
+        createdAt: new Date().toISOString(),
+        vulns: [],
+        score: 0,
+        recommendations: [],
+    });
+
     toast({
       title: "Scan Queued!",
       description: `Scan for ${values.targetUrl} has been successfully submitted.`,

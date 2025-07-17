@@ -3,6 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { ThemeProvider } from '@/components/theme-provider';
+import { ScansProvider } from '@/context/scans-context';
 
 export const metadata: Metadata = {
   title: 'AgenticScanLite',
@@ -23,9 +24,11 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          <SidebarProvider>
-            {children}
-          </SidebarProvider>
+          <ScansProvider>
+            <SidebarProvider>
+              {children}
+            </SidebarProvider>
+          </ScansProvider>
           <Toaster />
         </ThemeProvider>
       </body>

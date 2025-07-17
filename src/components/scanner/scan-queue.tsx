@@ -1,28 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { mockScans } from "@/lib/mock-data";
 import type { WebAppScan } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Target } from "lucide-react";
 import { StatusBadge } from "./status-badge";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
+import { useScans } from "@/context/scans-context";
 
 export default function ScanQueue() {
+  const { scans, removeScan } = useScans();
   const [queuedScans, setQueuedScans] = useState<WebAppScan[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
-    const filteredScans = mockScans.filter(
+    const filteredScans = scans.filter(
       (scan) => scan.status === "queued" || scan.status === "running"
     );
     setQueuedScans(filteredScans.sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
-  }, []);
+  }, [scans]);
 
   const handleCancelScan = (scanId: string) => {
-    setQueuedScans((prevScans) => prevScans.filter((scan) => scan.id !== scanId));
+    removeScan(scanId);
     toast({
       title: "Scan Canceled",
       description: `The scan (ID: ${scanId}) has been canceled.`,
