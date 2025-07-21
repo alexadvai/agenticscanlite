@@ -20,7 +20,7 @@ import { useScans } from "@/context/scans-context";
 type SortKey = "targetUrl" | "completedAt" | "score" | "severity";
 
 export const getHighestSeverity = (vulns: Vulnerability[]): Vulnerability["severity"] | null => {
-  if (vulns.length === 0) return null;
+  if (!vulns || vulns.length === 0) return null;
   const severityOrder: Vulnerability["severity"][] = ["Critical", "High", "Medium", "Low", "Informational"];
   let highest: Vulnerability["severity"] | null = null;
   let highestIndex = Infinity;
@@ -82,7 +82,7 @@ export default function ScanReports() {
 
   return (
     <div>
-       <h2 className="text-2xl font-headline font-bold mb-4">Scan Reports</h2>
+       <h2 className="text-3xl font-headline font-bold mb-4">Scan Reports</h2>
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>

@@ -91,143 +91,147 @@ export default function NewScanForm() {
       description: `Scan for ${values.targetUrl} has been successfully submitted.`,
     });
     form.reset();
+    window.location.hash = '#scan-queue';
   }
 
   return (
-    <Card className="max-w-3xl mx-auto">
-      <CardHeader>
-        <CardTitle>Launch a New Web App Scan</CardTitle>
-        <CardDescription>
-          Enter the details below to start a new security scan. The scanner will
-          analyze the target for common vulnerabilities.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="targetUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center"><Target className="mr-2 h-4 w-4"/>Target URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://example.com" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    The full URL of the web application you want to scan.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="scanMode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center"><Radio className="mr-2 h-4 w-4" />Scan Mode</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <>
+      <h2 className="text-3xl font-headline font-bold mb-4">New Scan</h2>
+      <Card className="max-w-3xl mx-auto">
+        <CardHeader>
+          <CardTitle>Launch a New Web App Scan</CardTitle>
+          <CardDescription>
+            Enter the details below to start a new security scan. The scanner will
+            analyze the target for common vulnerabilities.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="targetUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center"><Target className="mr-2 h-4 w-4"/>Target URL</FormLabel>
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a scan mode" />
-                      </SelectTrigger>
+                      <Input placeholder="https://example.com" {...field} />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="Passive">Passive Scan</SelectItem>
-                      <SelectItem value="Active">Active Scan</SelectItem>
-                      <SelectItem value="Authenticated">Authenticated Scan</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Passive scans are non-intrusive. Active scans send test payloads.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            {scanMode === 'Authenticated' && (
-                 <Card className="bg-muted/50 p-6 space-y-6">
-                     <FormField
-                        control={form.control}
-                        name="authMethod"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="flex items-center"><KeyRound className="mr-2 h-4 w-4"/>Authentication Method</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select an authentication method" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                    <SelectItem value="none">None</SelectItem>
-                                    <SelectItem value="form">Form-based (Username/Password)</SelectItem>
-                                    <SelectItem value="header">Header-based (Token)</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                     {authMethod === 'form' && (
-                         <>
+                    <FormDescription>
+                      The full URL of the web application you want to scan.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="scanMode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="flex items-center"><Radio className="mr-2 h-4 w-4" />Scan Mode</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a scan mode" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Passive">Passive Scan</SelectItem>
+                        <SelectItem value="Active">Active Scan</SelectItem>
+                        <SelectItem value="Authenticated">Authenticated Scan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Passive scans are non-intrusive. Active scans send test payloads.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              {scanMode === 'Authenticated' && (
+                  <Card className="bg-muted/50 p-6 space-y-6">
+                      <FormField
+                          control={form.control}
+                          name="authMethod"
+                          render={({ field }) => (
+                              <FormItem>
+                                  <FormLabel className="flex items-center"><KeyRound className="mr-2 h-4 w-4"/>Authentication Method</FormLabel>
+                                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                      <FormControl>
+                                      <SelectTrigger>
+                                          <SelectValue placeholder="Select an authentication method" />
+                                      </SelectTrigger>
+                                      </FormControl>
+                                      <SelectContent>
+                                      <SelectItem value="none">None</SelectItem>
+                                      <SelectItem value="form">Form-based (Username/Password)</SelectItem>
+                                      <SelectItem value="header">Header-based (Token)</SelectItem>
+                                      </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                              </FormItem>
+                          )}
+                          />
+                      {authMethod === 'form' && (
+                          <>
+                              <FormField
+                              control={form.control}
+                              name="username"
+                              render={({ field }) => (
+                                  <FormItem>
+                                  <FormLabel>Username</FormLabel>
+                                  <FormControl>
+                                      <Input placeholder="user@example.com" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                              />
+                              <FormField
+                              control={form.control}
+                              name="password"
+                              render={({ field }) => (
+                                  <FormItem>
+                                  <FormLabel>Password</FormLabel>
+                                  <FormControl>
+                                      <Input type="password" placeholder="••••••••" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                              />
+                          </>
+                      )}
+                      {authMethod === 'header' && (
                             <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Username</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="user@example.com" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                             <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Password</FormLabel>
-                                <FormControl>
-                                    <Input type="password" placeholder="••••••••" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                         </>
-                     )}
-                     {authMethod === 'header' && (
-                          <FormField
-                            control={form.control}
-                            name="token"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Authentication Token</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Bearer ..." {...field} />
-                                </FormControl>
-                                <FormDescription>The token will be sent in the Authorization header.</FormDescription>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                     )}
-                 </Card>
-            )}
+                              control={form.control}
+                              name="token"
+                              render={({ field }) => (
+                                  <FormItem>
+                                  <FormLabel>Authentication Token</FormLabel>
+                                  <FormControl>
+                                      <Input placeholder="Bearer ..." {...field} />
+                                  </FormControl>
+                                  <FormDescription>The token will be sent in the Authorization header.</FormDescription>
+                                  <FormMessage />
+                                  </FormItem>
+                              )}
+                              />
+                      )}
+                  </Card>
+              )}
 
-            <Button type="submit" className="w-full sm:w-auto">
-              <Rocket className="mr-2 h-4 w-4" />
-              Launch Scan
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <Button type="submit" className="w-full sm:w-auto">
+                <Rocket className="mr-2 h-4 w-4" />
+                Launch Scan
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { WebAppScan } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Target } from "lucide-react";
 import { StatusBadge } from "./status-badge";
@@ -33,7 +33,7 @@ export default function ScanQueue() {
 
   return (
     <div>
-      <h2 className="text-2xl font-headline font-bold mb-4">Active Scan Queue</h2>
+      <h2 className="text-3xl font-headline font-bold mb-4">Scan Queue</h2>
       {queuedScans.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {queuedScans.map((scan) => (
@@ -42,7 +42,7 @@ export default function ScanQueue() {
                 <div className="flex justify-between items-start">
                   <div>
                     <StatusBadge status={scan.status} />
-                    <CardTitle className="mt-2 flex items-center gap-2">
+                    <CardTitle className="mt-2 flex items-center gap-2 text-lg pt-1">
                        <Target className="w-5 h-5 text-muted-foreground" />
                        <span className="truncate">{scan.targetUrl}</span>
                     </CardTitle>

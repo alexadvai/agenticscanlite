@@ -71,7 +71,11 @@ export default function Dashboard() {
         recentScans,
     } = useMemo(() => {
         const counts: Record<Vulnerability["severity"], number> = { Critical: 0, High: 0, Medium: 0, Low: 0, Informational: 0 };
-        scans.forEach(scan => scan.vulns.forEach(vuln => counts[vuln.severity]++));
+        scans.forEach(scan => {
+          if(scan.vulns) {
+            scan.vulns.forEach(vuln => counts[vuln.severity]++)
+          }
+        });
         
         const timeCounts: Record<string, number> = {};
         scans.forEach(scan => {
@@ -101,8 +105,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:col-span-1">
+        <h2 className="text-3xl font-headline font-bold">Dashboard</h2>
+       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+            <div className="lg:col-span-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Scans</CardTitle>
@@ -140,10 +145,10 @@ export default function Dashboard() {
                     </CardContent>
                 </Card>
             </div>
-            <Card className="lg:col-span-1">
+            <Card className="lg:col-span-2">
                 <CardHeader>
                     <CardTitle>Vulnerability Severity</CardTitle>
-                    <CardDescription>Overall distribution.</CardDescription>
+                    <CardDescription>Overall distribution of discovered vulnerabilities.</CardDescription>
                 </CardHeader>
                 <CardContent className="pb-4 h-[240px]">
                     <ResponsiveContainer width="100%" height="100%">
@@ -184,7 +189,7 @@ export default function Dashboard() {
        </div>
        <Card>
             <CardHeader>
-                <CardTitle className="flex items-center gap-2"><FileText className="h-5 w-5"/>Recent Scans</CardTitle>
+                <CardTitle className="flex items-center gap-2 font-headline"><FileText className="h-5 w-5"/>Recent Scans</CardTitle>
                 <CardDescription>A log of the last 5 completed scans.</CardDescription>
             </CardHeader>
             <CardContent>

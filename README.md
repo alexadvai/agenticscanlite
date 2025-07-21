@@ -9,6 +9,7 @@ AgenticScanLite is a modern, AI-powered web application security scanner built w
 - **Scan Queue**: View the status of currently running and queued scans.
 - **Detailed Reports**: Browse historical scan reports, view vulnerability details, and access AI-powered explanations.
 - **AI-Powered Explanations**: Utilizes Gemini to explain discovered vulnerabilities, their impact, and potential remediation steps.
+- **Customizable Themes**: Switch between multiple color schemes to personalize the interface.
 - **Responsive Design**: A clean, responsive user interface built with ShadCN UI and Tailwind CSS.
 
 ## 🛠️ Tech Stack
@@ -18,6 +19,7 @@ AgenticScanLite is a modern, AI-powered web application security scanner built w
 - **UI**: [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [ShadCN UI](https://ui.shadcn.com/), [Tailwind CSS](https://tailwindcss.com/)
 - **Icons**: [Lucide React](https://lucide.dev/guide/packages/lucide-react)
 - **Charts**: [Recharts](https://recharts.org/)
+- **State Management**: React Context API
 - **Forms**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
 
 ## 🚀 Getting Started
