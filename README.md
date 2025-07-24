@@ -4,13 +4,13 @@ AgenticScanLite is a modern, AI-powered web application security scanner built w
 
 ## ✨ Features
 
-- **Dashboard**: Get a quick overview of scan activity and vulnerability statistics with interactive charts.
-- **New Scans**: Launch new scans with configurable options, including passive, active, and authenticated scanning modes.
-- **Scan Queue**: View the status of currently running and queued scans.
-- **Detailed Reports**: Browse historical scan reports, view vulnerability details, and access AI-powered explanations.
-- **AI-Powered Explanations**: Utilizes Gemini to explain discovered vulnerabilities, their impact, and potential remediation steps.
-- **Customizable Themes**: Switch between multiple color schemes to personalize the interface.
-- **Responsive Design**: A clean, responsive user interface built with ShadCN UI and Tailwind CSS.
+- **Interactive Dashboard**: Get a quick overview of scan activity and vulnerability statistics with interactive charts and a log of recent scans.
+- **Configurable Scans**: Launch new scans with options for passive, active, and authenticated scanning modes.
+- **Live Scan Queue**: View the status of currently running and queued scans, with the ability to cancel them in real-time.
+- **Detailed Reports**: Browse historical scan reports, view in-depth vulnerability details, and click on recent scans for a full report modal.
+- **AI-Powered Explanations**: Utilizes Google's Gemini to explain discovered vulnerabilities, their impact, and potential remediation steps directly within the report.
+- **Customizable Themes**: Switch between multiple color schemes (Default, Green, Orange) to personalize the interface.
+- **Responsive Design**: A clean, responsive user interface built with ShadCN UI and Tailwind CSS, featuring a collapsible sidebar for navigation.
 
 ## 🛠️ Tech Stack
 
@@ -19,8 +19,8 @@ AgenticScanLite is a modern, AI-powered web application security scanner built w
 - **UI**: [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [ShadCN UI](https://ui.shadcn.com/), [Tailwind CSS](https://tailwindcss.com/)
 - **Icons**: [Lucide React](https://lucide.dev/guide/packages/lucide-react)
 - **Charts**: [Recharts](https://recharts.org/)
-- **State Management**: React Context API
-- **Forms**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
+- **State Management**: React Context API for real-time UI updates
+- **Forms**: [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/) for robust form validation
 
 ## 🚀 Getting Started
 
