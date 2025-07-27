@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -95,7 +96,7 @@ export default function NewScanForm() {
           <CardDescription>
             Enter the details below to start a new security scan. The scanner will
             analyze the target for common vulnerabilities.
-          </Description>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
