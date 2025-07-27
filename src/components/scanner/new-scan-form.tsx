@@ -73,17 +73,9 @@ export default function NewScanForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     addScan({
-        id: `scan-${Math.random().toString(36).substring(2, 8)}`,
         targetUrl: values.targetUrl,
         scanMode: values.scanMode,
         authMethod: values.authMethod || 'none',
-        status: "queued",
-        agentId: "agent-manual-01",
-        submittedBy: "user-1",
-        createdAt: new Date().toISOString(),
-        vulns: [],
-        score: 0,
-        recommendations: [],
     });
 
     toast({
@@ -103,7 +95,7 @@ export default function NewScanForm() {
           <CardDescription>
             Enter the details below to start a new security scan. The scanner will
             analyze the target for common vulnerabilities.
-          </CardDescription>
+          </Description>
         </CardHeader>
         <CardContent>
           <Form {...form}>
