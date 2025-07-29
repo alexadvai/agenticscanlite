@@ -21,6 +21,8 @@ import { DateRange } from "react-day-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
+import { Card, CardContent } from "../ui/card";
+import { ScrollArea } from "../ui/scroll-area";
 
 
 type SortKey = "targetUrl" | "completedAt" | "score" | "severity";
@@ -113,7 +115,7 @@ export default function ScanReports() {
 
 
   return (
-    <div>
+    <div className="flex flex-col flex-grow h-full">
        <div className="flex justify-between items-center mb-4">
         <h2 className="text-3xl font-headline font-bold">Scan Reports</h2>
         <div className="flex items-center gap-2">
@@ -159,60 +161,64 @@ export default function ScanReports() {
             )}
         </div>
       </div>
-      <div className="rounded-lg border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                <Button variant="ghost" onClick={() => requestSort('targetUrl')}>
-                  Target URL <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
-              <TableHead>
-                <Button variant="ghost" onClick={() => requestSort('completedAt')}>
-                  Date <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">
-                <Button variant="ghost" onClick={() => requestSort('score')}>
-                  Score <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
-              <TableHead>
-                <Button variant="ghost" onClick={() => requestSort('severity')}>
-                  Highest Severity <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedScans.map((scan) => {
-              const highestSeverity = getHighestSeverity(scan.vulns);
-              return (
-              <TableRow key={scan.id} onClick={() => setSelectedScan(scan)} className="cursor-pointer">
-                <TableCell className="font-medium">{scan.targetUrl}</TableCell>
-                <TableCell>
-                  {scan.completedAt ? format(new Date(scan.completedAt), "PPp") : 'N/A'}
-                </TableCell>
-                <TableCell className="text-center font-mono">{scan.status === 'failed' ? 'N/A' : scan.score}</TableCell>
-                <TableCell>
-                  {highestSeverity ? (
-                    <SeverityBadge severity={highestSeverity} />
-                  ) : (
-                    scan.status !== 'failed' && <span className="text-muted-foreground">None</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-center">
-                    <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100/10 text-green-500' : 'bg-red-100/10 text-red-500'}`}>
-                        {scan.status}
-                    </span>
-                </TableCell>
-              </TableRow>
-            )})}
-          </TableBody>
-        </Table>
-      </div>
+      <Card className="flex-grow">
+       <CardContent className="h-full">
+        <ScrollArea className="h-full">
+            <Table>
+            <TableHeader>
+                <TableRow>
+                <TableHead>
+                    <Button variant="ghost" onClick={() => requestSort('targetUrl')}>
+                    Target URL <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </TableHead>
+                <TableHead>
+                    <Button variant="ghost" onClick={() => requestSort('completedAt')}>
+                    Date <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </TableHead>
+                <TableHead className="text-center">
+                    <Button variant="ghost" onClick={() => requestSort('score')}>
+                    Score <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </TableHead>
+                <TableHead>
+                    <Button variant="ghost" onClick={() => requestSort('severity')}>
+                    Highest Severity <ArrowUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </TableHead>
+                <TableHead className="text-center">Status</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {sortedScans.map((scan) => {
+                const highestSeverity = getHighestSeverity(scan.vulns);
+                return (
+                <TableRow key={scan.id} onClick={() => setSelectedScan(scan)} className="cursor-pointer">
+                    <TableCell className="font-medium">{scan.targetUrl}</TableCell>
+                    <TableCell>
+                    {scan.completedAt ? format(new Date(scan.completedAt), "PPp") : 'N/A'}
+                    </TableCell>
+                    <TableCell className="text-center font-mono">{scan.status === 'failed' ? 'N/A' : scan.score}</TableCell>
+                    <TableCell>
+                    {highestSeverity ? (
+                        <SeverityBadge severity={highestSeverity} />
+                    ) : (
+                        scan.status !== 'failed' && <span className="text-muted-foreground">None</span>
+                    )}
+                    </TableCell>
+                    <TableCell className="text-center">
+                        <span className={`capitalize px-2 py-1 text-xs font-semibold rounded-full ${scan.status === 'completed' ? 'bg-green-100/10 text-green-500' : 'bg-red-100/10 text-red-500'}`}>
+                            {scan.status}
+                        </span>
+                    </TableCell>
+                </TableRow>
+                )})}
+            </TableBody>
+            </Table>
+        </ScrollArea>
+        </CardContent>
+      </Card>
 
       {selectedScan && (
         <ReportDetailModal

@@ -42,7 +42,7 @@ export default function AppContent() {
   const ActiveComponent = componentMap[activeTab] || Dashboard;
 
   return (
-    <div>
+    <div className="flex flex-col flex-grow">
         <ActiveComponent />
     </div>
   );

@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import ReportDetailModal from "../scanner/report-detail-modal";
 import { getHighestSeverity } from "../scanner/scan-reports";
 import { useScans } from "@/context/scans-context";
+import { ScrollArea } from "../ui/scroll-area";
 
 
 const COLORS = {
@@ -104,7 +105,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col flex-grow space-y-6">
         <h2 className="text-3xl font-headline font-bold">Dashboard</h2>
        <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
             <div className="lg:col-span-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
@@ -187,28 +188,30 @@ export default function Dashboard() {
                 </CardContent>
             </Card>
        </div>
-       <Card>
+       <Card className="flex-grow flex flex-col">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-headline"><FileText className="h-5 w-5"/>Recent Scans</CardTitle>
                 <CardDescription>A log of the last 5 completed scans.</CardDescription>
             </CardHeader>
-            <CardContent>
-                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Target URL</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead className="text-center">Score</TableHead>
-                            <TableHead>Highest Severity</TableHead>
-                            <TableHead className="text-center">Status</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {recentScans.map((scan) => (
-                           <RecentScanRow key={scan.id} scan={scan} onRowClick={setSelectedScan} />
-                        ))}
-                    </TableBody>
-                 </Table>
+            <CardContent className="flex-grow">
+                 <ScrollArea className="h-full">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Target URL</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead className="text-center">Score</TableHead>
+                                <TableHead>Highest Severity</TableHead>
+                                <TableHead className="text-center">Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {recentScans.map((scan) => (
+                            <RecentScanRow key={scan.id} scan={scan} onRowClick={setSelectedScan} />
+                            ))}
+                        </TableBody>
+                    </Table>
+                 </ScrollArea>
             </CardContent>
        </Card>
        {selectedScan && (
