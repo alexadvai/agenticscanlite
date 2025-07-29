@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -11,11 +12,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
-import { format } from "date-fns";
+import { ArrowUpDown, Calendar as CalendarIcon, X } from "lucide-react";
+import { format, isWithinInterval } from "date-fns";
 import ReportDetailModal from "./report-detail-modal";
 import { SeverityBadge } from "./severity-badge";
 import { useScans } from "@/context/scans-context";
+import { DateRange } from "react-day-picker";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { cn } from "@/lib/utils";
+
 
 type SortKey = "targetUrl" | "completedAt" | "score" | "severity";
 
@@ -39,11 +45,32 @@ export default function ScanReports() {
   const { scans } = useScans();
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: "asc" | "desc" } | null>({ key: 'completedAt', direction: 'desc' });
   const [selectedScan, setSelectedScan] = useState<WebAppScan | null>(null);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
   const completedScans = useMemo(() => scans.filter((scan) => scan.status === "completed" || scan.status === "failed"), [scans]);
+  
+  const filteredScans = useMemo(() => {
+    if (!dateRange || (!dateRange.from && !dateRange.to)) {
+      return completedScans;
+    }
+    return completedScans.filter((scan) => {
+      if (!scan.completedAt) return false;
+      const completedDate = new Date(scan.completedAt);
+      const interval: Interval = {
+          start: dateRange.from || new Date(0),
+          end: dateRange.to || new Date(),
+      };
+      // Set end of day for the 'to' date to include the whole day
+      if (interval.end) {
+        interval.end.setHours(23, 59, 59, 999);
+      }
+      return isWithinInterval(completedDate, interval);
+    });
+  }, [completedScans, dateRange]);
+
 
   const sortedScans = useMemo(() => {
-    let sortableItems = [...completedScans];
+    let sortableItems = [...filteredScans];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         let aValue, bValue;
@@ -70,7 +97,7 @@ export default function ScanReports() {
       });
     }
     return sortableItems;
-  }, [completedScans, sortConfig]);
+  }, [filteredScans, sortConfig]);
 
   const requestSort = (key: SortKey) => {
     let direction: "asc" | "desc" = "asc";
@@ -79,10 +106,59 @@ export default function ScanReports() {
     }
     setSortConfig({ key, direction });
   };
+  
+  const clearDateFilter = () => {
+    setDateRange(undefined);
+  };
+
 
   return (
     <div>
-       <h2 className="text-3xl font-headline font-bold mb-4">Scan Reports</h2>
+       <div className="flex justify-between items-center mb-4">
+        <h2 className="text-3xl font-headline font-bold">Scan Reports</h2>
+        <div className="flex items-center gap-2">
+            <Popover>
+            <PopoverTrigger asChild>
+                <Button
+                variant={"outline"}
+                className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !dateRange && "text-muted-foreground"
+                )}
+                >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {dateRange?.from ? (
+                    dateRange.to ? (
+                    <>
+                        {format(dateRange.from, "LLL dd, y")} -{" "}
+                        {format(dateRange.to, "LLL dd, y")}
+                    </>
+                    ) : (
+                    format(dateRange.from, "LLL dd, y")
+                    )
+                ) : (
+                    <span>Pick a date range</span>
+                )}
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                initialFocus
+                mode="range"
+                defaultMonth={dateRange?.from}
+                selected={dateRange}
+                onSelect={setDateRange}
+                numberOfMonths={2}
+                />
+            </PopoverContent>
+            </Popover>
+            {dateRange && (
+                <Button variant="ghost" size="icon" onClick={clearDateFilter}>
+                    <X className="h-4 w-4" />
+                </Button>
+            )}
+        </div>
+      </div>
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
@@ -148,3 +224,4 @@ export default function ScanReports() {
     </div>
   );
 }
+
